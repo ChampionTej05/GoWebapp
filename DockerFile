@@ -1,2 +1,17 @@
 # syntax=docker/dockerfile:1
 FROM golang:1.16-alpine
+# create docker directory to store the code 
+WORKDIR /dockerapp
+# copy dependencies to directory 
+COPY /app/go.mod /dockerapp/go.mod
+
+# copy source code 
+ADD /app /dockerapp/
+RUN go mod download
+RUN go build -o /docker-go-webapp
+
+# since service runs on 3000 port 
+EXPOSE 3000
+
+CMD [ "/docker-go-webapp" ]
+
